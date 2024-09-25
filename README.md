@@ -1,4 +1,4 @@
-# EZ Meal Planner
+# EZ Meal Prep
 
 Plan your meals and grocery trips
 
