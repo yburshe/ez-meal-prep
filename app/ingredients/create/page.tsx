@@ -1,57 +1,68 @@
 import {createIngredient} from "@/app/actions/createIngredient";
+import { db } from "@/db/drizzle";
+import { store } from "@/db/schema";
 
-export default function CreateIngredient() {
+export default async function CreateIngredient() {
+
+    const stores = await db.select().from(store);
+
     return (
         <div className="p-4">
             <h1 className="border-b font-semibold text-xl mb-8">Add a new store</h1>
-            <form className="flex flex-col gap-4 items-center" action={createIngredient}>
+            <form className="w-96 mx-auto flex flex-col gap-4" action={createIngredient}>
                 <label className="block">
                     Ingredient Name
-                    <input className="block border rounded-md" type="text" name="ingredient_name"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="text" name="ingredient_name"/>
                 </label>
                 <label>
-                    Store Id
-                    <input className="block border rounded-md" type="number" name="store_id"/>
+                    Store
+                    <select className="mt-1 w-full block border bg-white p-2 rounded-md" name="store_id">
+                        {stores.map((store) => (
+                            <option key={store.store_id} value={store.store_id}>
+                                {store.store_name}
+                            </option>
+                        ))}
+                    </select>
                 </label>
                 <label>
                     Price
-                    <input className="block border rounded-md" type="text" name="price"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="text" name="price"/>
                 </label>
                 <label>
                     Serving Per Pack
-                    <input className="block border rounded-md" type="text" name="servings_per_pack"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="text" name="servings_per_pack"/>
                 </label>
                 <label>
                     Serving Size
-                    <input className="block border rounded-md" type="text" name="serving_size"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="text" name="serving_size"/>
                 </label>
                 <label>
                     Calories
-                    <input className="block border rounded-md" type="number" name="calories"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="calories"/>
                 </label>
                 <label>
                     Total Fat
-                    <input className="block border rounded-md" type="number" name="total_fat"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="total_fat"/>
                 </label>
                 <label>
                     Total Carbs
-                    <input className="block border rounded-md" type="number" name="total_carbs"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="total_carbs"/>
                 </label>
                 <label>
                     Protein
-                    <input className="block border rounded-md" type="number" name="protein"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="protein"/>
                 </label>
                 <label>
                     Fiber
-                    <input className="block border rounded-md" type="number" name="fiber"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="fiber"/>
                 </label>
                 <label>
                     Cholesterol
-                    <input className="block border rounded-md" type="number" name="cholesterol"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="cholesterol"/>
                 </label>
                 <label>
                     Sodium
-                    <input className="block border rounded-md" type="number" name="sodium"/>
+                    <input className="w-full p-1 mt-1 block border rounded-md" type="number" name="sodium"/>
                 </label>
                 <button
                     className="bg-slate-50 hover:bg-slate-100 px-8 py-2 rounded-md shadow-sm mt-4"
