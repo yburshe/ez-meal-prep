@@ -1,10 +1,12 @@
 "use server";
 import { db } from "@/db/drizzle";
 import { store } from "@/db/schema";
+import {eq} from "drizzle-orm";
 
 export async function editStore(formData: FormData) {
     
 
+    const store_id = Number(formData.get("store_id"))
     const store_name = formData.get("store_name") as string;
     const street_number = Number(formData.get("street_number"));
     const street_name = formData.get("street_name") as string;
@@ -19,5 +21,5 @@ export async function editStore(formData: FormData) {
       city,
       state,
       zip,
-    });
+    }).where(eq(store.store_id, store_id));
   }
