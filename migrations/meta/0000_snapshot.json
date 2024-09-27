@@ -1,5 +1,5 @@
 {
-  "id": "8a34f809-9192-4cf0-b6e6-cc55c4905115",
+  "id": "82c62fde-1cf9-432c-ae89-1afe1b2f6437",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,86 +18,86 @@
           "name": "ingredient_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "store_name": {
-          "name": "store_name",
-          "type": "text",
+        "store_id": {
+          "name": "store_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "price": {
           "name": "price",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "servings_per_pack": {
           "name": "servings_per_pack",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "serving_size": {
           "name": "serving_size",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "calories": {
           "name": "calories",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "total_fat": {
           "name": "total_fat",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "total_carbs": {
           "name": "total_carbs",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "protein": {
           "name": "protein",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fiber": {
           "name": "fiber",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "cholesterol": {
           "name": "cholesterol",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "sodium": {
           "name": "sodium",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "ingredient_store_name_store_store_name_fk": {
-          "name": "ingredient_store_name_store_store_name_fk",
+        "ingredient_store_id_store_store_id_fk": {
+          "name": "ingredient_store_id_store_store_id_fk",
           "tableFrom": "ingredient",
           "tableTo": "store",
           "columnsFrom": [
-            "store_name"
+            "store_id"
           ],
           "columnsTo": [
-            "store_name"
+            "store_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -120,55 +120,55 @@
           "name": "recipe_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "cost": {
           "name": "cost",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "calories": {
           "name": "calories",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "total_fat": {
           "name": "total_fat",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "total_carbs": {
           "name": "total_carbs",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "protein": {
           "name": "protein",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fiber": {
           "name": "fiber",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "cholesterol": {
           "name": "cholesterol",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "sodium": {
           "name": "sodium",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -184,19 +184,19 @@
           "name": "recipe_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "ingredient_id": {
           "name": "ingredient_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "quantity": {
           "name": "quantity",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -235,41 +235,47 @@
       "name": "store",
       "schema": "",
       "columns": {
+        "store_id": {
+          "name": "store_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "store_name": {
           "name": "store_name",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "street_number": {
           "name": "street_number",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "street_name": {
           "name": "street_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "city": {
           "name": "city",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "state": {
           "name": "state",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "zip": {
           "name": "zip",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
