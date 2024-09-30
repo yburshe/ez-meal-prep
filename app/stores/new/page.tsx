@@ -22,7 +22,7 @@ export default function NewStore() {
         <label>
           <p className="text-sm text-neutral-600">Name</p>
           <input
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md mt-1 block"
             type="text"
             name="name"
           />
@@ -30,7 +30,7 @@ export default function NewStore() {
         <label>
           <p className="text-sm text-neutral-600">Street Number</p>
           <input
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md mt-1 block"
             type="number"
             name="streetNumber"
           />
@@ -38,7 +38,7 @@ export default function NewStore() {
         <label>
           <p className="text-sm text-neutral-600">Street Name</p>
           <input
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md mt-1 block"
             type="text"
             name="streetName"
           />
@@ -46,7 +46,7 @@ export default function NewStore() {
         <label>
           <p className="text-sm text-neutral-600">City</p>
           <input
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md mt-1 block"
             type="text"
             name="city"
           />
@@ -67,12 +67,12 @@ export default function NewStore() {
         <label>
           <p className="text-sm text-neutral-600">Zip</p>
           <input
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md mt-1 block"
             type="text"
             name="zip"
           />
         </label>
-        <button className="mt-8 border w-56 p-1 px-3 py-2 rounded-sm bg-slate">
+        <button className="mt-8 hover:bg-slate-50 border shadow-sm w-56 p-1 px-3 py-2 rounded-md">
           Create
         </button>
       </form>
