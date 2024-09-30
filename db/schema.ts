@@ -17,13 +17,13 @@ export const ingredient = pgTable("ingredient", {
     price: decimal("price").notNull(),
     servings_per_pack : text("servings_per_pack").notNull(),
     serving_size: text("serving_size").notNull(),
-    calories: integer("calories").notNull(),
-    total_fat: integer("total_fat").notNull(),
-    total_carbs: integer("total_carbs").notNull(),
-    protein: integer("protein").notNull(),
-    fiber: integer("fiber").notNull(),
-    cholesterol: integer("cholesterol").notNull(),
-    sodium: integer("sodium").notNull(),
+    calories: decimal("calories").notNull(),
+    total_fat: decimal("total_fat").notNull(),
+    total_carbs: decimal("total_carbs").notNull(),
+    protein: decimal("protein").notNull(),
+    fiber: decimal("fiber").notNull(),
+    cholesterol: decimal("cholesterol").notNull(),
+    sodium: decimal("sodium").notNull(),
 })
 
 export const recipe = pgTable("recipe", {
