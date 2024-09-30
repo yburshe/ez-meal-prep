@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 //Getters
 export async function getStores() {
   const stores = await db.select().from(store);
-  return stores;
+  return stores.slice(1);
 }
 
 export async function getStoreDetails(id: number) {
@@ -91,7 +91,25 @@ export async function deleteStore(formData: FormData) {
 
 //Getters
 export async function getIngredients() {
-  const ingredients = await db.select().from(ingredient);
+  const ingredients = await db
+    .select({
+      id: ingredient.id,
+      name: ingredient.name,
+      price: ingredient.price,
+      servingsPerPack: ingredient.servings_per_pack,
+      servingSize: ingredient.serving_size,
+      calories: ingredient.calories,
+      totalFat: ingredient.total_fat,
+      totalCarbs: ingredient.total_carbs,
+      protein: ingredient.protein,
+      fiber: ingredient.fiber,
+      cholesterol: ingredient.cholesterol,
+      sodium: ingredient.sodium,
+      storeName: store.name,
+    })
+    .from(ingredient)
+    .innerJoin(store, eq(store.id, ingredient.store_id));
+
   return ingredients;
 }
 
@@ -111,13 +129,15 @@ export async function createIngredient(formData: FormData) {
   const price = formData.get("price") as string;
   const servingsPerPack = formData.get("servingsPerPack") as string;
   const servingSize = formData.get("servingSize") as string;
-  const calories = Number(formData.get("calories"));
-  const totalFat = Number(formData.get("totalFat"));
-  const totalCarbs = Number(formData.get("totalCarbs"));
-  const protein = Number(formData.get("protein"));
-  const fiber = Number(formData.get("fiber"));
-  const cholesterol = Number(formData.get("cholesterol"));
-  const sodium = Number(formData.get("sodium"));
+  const calories = formData.get("calories") as string;
+  const totalFat = formData.get("totalFat") as string;
+  const totalCarbs = formData.get("totalCarbs") as string;
+  const protein = formData.get("protein") as string;
+  const fiber = formData.get("fiber") as string;
+  const cholesterol = formData.get("cholesterol") as string;
+  const sodium = formData.get("sodium") as string;
+
+  console.log(formData)
 
   await db.insert(ingredient).values({
     name,
@@ -145,13 +165,13 @@ export async function updateIngredient(formData: FormData) {
   const price = formData.get("price") as string;
   const servingsPerPack = formData.get("servingsPerPack") as string;
   const servingSize = formData.get("servingSize") as string;
-  const calories = Number(formData.get("calories"));
-  const totalFat = Number(formData.get("totalFat"));
-  const totalCarbs = Number(formData.get("totalCarbs"));
-  const protein = Number(formData.get("protein"));
-  const fiber = Number(formData.get("fiber"));
-  const cholesterol = Number(formData.get("cholesterol"));
-  const sodium = Number(formData.get("sodium"));
+  const calories = formData.get("calories") as string;
+  const totalFat = formData.get("totalFat") as string;
+  const totalCarbs = formData.get("totalCarbs") as string;
+  const protein = formData.get("protein") as string;
+  const fiber = formData.get("fiber") as string;
+  const cholesterol = formData.get("cholesterol") as string;
+  const sodium = formData.get("sodium") as string;
 
   await db
     .update(ingredient)
@@ -193,8 +213,9 @@ export async function deleteIngredient(formData: FormData) {
 export async function getRecipes() {
   const recipes = await db
     .select({
-      recipeId: recipe.id,
-      recipeName: recipe.name,
+      id: recipe.id,
+      name: recipe.name,
+      totalPrice: sql<number>`ROUND(SUM(${ingredient.price} / CAST(${ingredient.servings_per_pack} AS DECIMAL) * CAST(${recipe_ingredient.quantity} AS DECIMAL)), 2)`,
       totalCalories: sql<number>`SUM(${ingredient.calories} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalFat: sql<number>`SUM(${ingredient.total_fat} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalCarbs: sql<number>`SUM(${ingredient.total_carbs} * ${recipe_ingredient.quantity}::DECIMAL)`,
@@ -214,8 +235,9 @@ export async function getRecipes() {
 export async function getRecipeDetails(id: number) {
   const recipeDetails = await db
     .select({
-      recipeId: recipe.id,
-      recipeName: recipe.name,
+      id: recipe.id,
+      name: recipe.name,
+      totalPrice: sql<number>`ROUND(SUM(${ingredient.price} / CAST(${ingredient.servings_per_pack} AS DECIMAL) * CAST(${recipe_ingredient.quantity} AS DECIMAL)), 2)`,
       totalCalories: sql<number>`SUM(${ingredient.calories} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalFat: sql<number>`SUM(${ingredient.total_fat} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalCarbs: sql<number>`SUM(${ingredient.total_carbs} * ${recipe_ingredient.quantity}::DECIMAL)`,
@@ -223,6 +245,17 @@ export async function getRecipeDetails(id: number) {
       totalFiber: sql<number>`SUM(${ingredient.fiber} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalCholesterol: sql<number>`SUM(${ingredient.cholesterol} * ${recipe_ingredient.quantity}::DECIMAL)`,
       totalSodium: sql<number>`SUM(${ingredient.sodium} * ${recipe_ingredient.quantity}::DECIMAL)`,
+      ingredients: sql<
+        Array<{ id: number; name: string; quantity: number; price: number }>
+      >`
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'id', ${ingredient.id},
+            'name', ${ingredient.name},
+            'quantity', CAST(${recipe_ingredient.quantity} AS DECIMAL),
+            'price', ROUND(${ingredient.price} / CAST(${ingredient.servings_per_pack} AS DECIMAL) * CAST(${recipe_ingredient.quantity} AS DECIMAL), 2)
+          )
+        ) AS ingredients`,
     })
     .from(recipe)
     .fullJoin(recipe_ingredient, eq(recipe.id, recipe_ingredient.recipe_id))
@@ -235,53 +268,61 @@ export async function getRecipeDetails(id: number) {
 
 //Setters
 export async function createRecipe(formData: FormData) {
+  console.log(formData);
   const name = formData.get("name") as string;
-  const ingredients = formData.getAll("ingredients") as string[];
-  const quantities = formData.getAll("quantities") as string[];
+  const ingredientIds = formData.getAll("ingredients").map(Number);
+  const quantities = formData
+    .getAll("quantity")
+    .map(String)
+    .filter((quantity) => quantity !== "");
 
-  const insertRecipe = await db
+  console.log(ingredientIds);
+  console.log(quantities);
+
+  const id = await db
     .insert(recipe)
-    .values({
-      name,
-    })
-    .returning();
+    .values({ name })
+    .returning({ insertedId: recipe.id });
+  console.log(id);
 
-  const recipe_id = insertRecipe[0].id;
-
-  const recipeIngredients = ingredients.map((ingredient, index) => ({
-    recipe_id,
-    ingredient_id: Number(ingredients[index]),
-    quantity: quantities[index],
-  }));
-
-  await db.insert(recipe_ingredient).values(recipeIngredients);
+  for (let i = 0; i < ingredientIds.length; i++) {
+    await db.insert(recipe_ingredient).values({
+      recipe_id: id[0].insertedId,
+      ingredient_id: ingredientIds[i],
+      quantity: quantities[i],
+    });
+  }
 
   revalidatePath("/recipes");
   redirect("/recipes");
 }
 
 export async function updateRecipe(formData: FormData) {
-  const recipe_id = Number(formData.get("id"));
+  const id = Number(formData.get("id"));
   const name = formData.get("name") as string;
-  const ingredients = formData.getAll("ingredients") as string[];
-  const quantities = formData.getAll("quantities") as string[];
+  const ingredientIds = formData.getAll("ingredients").map(Number);
+  const quantities = formData
+    .getAll("quantity")
+    .map(String)
+    .filter((quantity) => quantity !== "");
 
-  await db.update(recipe).set({ name }).where(eq(recipe.id, recipe_id));
+  console.log(ingredientIds);
+  console.log(quantities);
 
-  await db
-    .delete(recipe_ingredient)
-    .where(eq(recipe_ingredient.recipe_id, recipe_id));
+  await db.update(recipe).set({ name }).where(eq(recipe.id, id));
 
-  const recipeIngredients = ingredients.map((ingredient, index) => ({
-    recipe_id,
-    ingredient_id: Number(ingredient),
-    quantity: quantities[index],
-  }));
+  await db.delete(recipe_ingredient).where(eq(recipe_ingredient.recipe_id, id));
 
-  await db.insert(recipe_ingredient).values(recipeIngredients);
+  for (let i = 0; i < ingredientIds.length; i++) {
+    await db.insert(recipe_ingredient).values({
+      recipe_id: id,
+      ingredient_id: ingredientIds[i],
+      quantity: quantities[i], // Insert the quantity for each ingredient
+    });
+  }
 
-  revalidatePath(`/recipes/${recipe_id}`);
-  revalidatePath(`/recipes/edit/${recipe_id}`);
+  revalidatePath(`/recipes/${id}`);
+  revalidatePath(`/recipes/edit/${id}`);
   revalidatePath("/recipes");
   redirect("/recipes");
 }
