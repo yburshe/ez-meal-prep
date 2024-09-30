@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LuPencil, LuPlus, LuTrash } from "react-icons/lu";
 import { getStores } from "../actions";
+import Card from "../components/Card";
 
 export default async function Stores() {
   const stores = await getStores();
@@ -15,12 +16,12 @@ export default async function Stores() {
       <div className="mb-4 border-b p-2">
         <h1 className="text-2xl font-bold">Stores</h1>
       </div>
-      <ul className="grid grid-cols-2 gap-4">
-        {stores.slice(1).map((store) => (
-          <div className="border rounded-sm shadow-sm" key={store.id}>
+      <ul className="flex flex-wrap gap-4">
+        {stores.map((store) => (
+          <Card key={store.id}>
             <div className="p-2 border-b flex justify-between">
               <Link
-                className="text-lg font-semibold"
+                className="text-lg font-semibold underline"
                 href={`/stores/${store.id}`}
               >
                 {store.name}
@@ -42,7 +43,7 @@ export default async function Stores() {
                 {store.city} {store.state} {store.zip}
               </p>
             </div>
-          </div>
+          </Card>
         ))}
       </ul>
     </div>
