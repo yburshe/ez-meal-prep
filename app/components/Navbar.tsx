@@ -1,11 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { LuCarrot, LuHome, LuSandwich, LuStore } from "react-icons/lu";
 
 export default function Navbar() {
-  const router = useRouter();
-
   const links = [
     { href: "/", text: "Home", icon: <LuHome /> },
     { href: "/recipes", text: "Recipes", icon: <LuSandwich /> },
@@ -15,11 +12,11 @@ export default function Navbar() {
 
   return (
     <nav>
-      <ul className="flex gap-6 p-6 bg-slate-50 shadow-sm">
+      <ul className="flex gap-1 p-4 pl-6 bg-neu text-white shadow-sm">
         {links.map((link) => (
           <li key={link.href}>
-            <Link href={link.href}>
-              <div className="flex items-center gap-1 font-medium">
+            <Link className="hover:bg-black/50 transition-colors block px-4 py-2 rounded-md" href={link.href}>
+              <div className="flex items-center gap-1">
                 {link.icon}
                 {link.text}
               </div>
