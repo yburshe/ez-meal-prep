@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        neu: 'rgba(204,54,58)'
+        accent: '#f77c3e'
       },
     },
   },
