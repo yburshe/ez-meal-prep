@@ -30,7 +30,7 @@ export default async function EditIngredient({
       </div>
       <form
         action={updateIngredient}
-        className="m-2 flex flex-col items-center gap-6"
+        className="max-w-xl grid grid-cols-2 items-start place-items-center  mx-auto m-2 gap-6"
       >
         <input type="hidden" name="id" value={ingredientDetails[0].id} />
         <label>

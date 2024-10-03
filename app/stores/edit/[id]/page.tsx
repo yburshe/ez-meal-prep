@@ -1,7 +1,8 @@
 import { getStoreDetails, updateStore } from "@/app/actions";
 import Link from "next/link";
-import { LuArrowLeft} from "react-icons/lu";
-import usStates from '@/db/usStates.json'
+import { LuArrowLeft } from "react-icons/lu";
+import usStates from "@/db/usStates.json";
+import { Button } from "@/app/components/Buttons";
 
 export default async function EditStore({
   params,
@@ -10,16 +11,14 @@ export default async function EditStore({
     id: number;
   };
 }) {
-
-
-  const storeDetails = await getStoreDetails(params.id)
+  const storeDetails = await getStoreDetails(params.id);
 
   return (
     <div>
       <div className="mb-8 gap-2 flex  border-b p-2 items-center">
         <Link
-          className="flex gap-2 px-4 py-2 rounded-sm items-center"
-          href="/stores"
+          className="flex gap-2 px-4 py-2 rounded-md items-center"
+          href={`/stores/${params.id}`}
         >
           <LuArrowLeft className="text-xl" />
         </Link>
@@ -27,14 +26,14 @@ export default async function EditStore({
       </div>
       <form
         action={updateStore}
-        className="m-2 flex flex-col items-center gap-6"
+        className="w-56 mx-auto m-2 flex flex-col items-center gap-6"
       >
         <input type="hidden" name="id" value={params.id} />
         <label>
           <p className="text-sm text-neutral-600">Name</p>
           <input
             defaultValue={storeDetails[0].name}
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md block"
             type="text"
             name="name"
           />
@@ -43,7 +42,7 @@ export default async function EditStore({
           <p className="text-sm text-neutral-600">Street Number</p>
           <input
             defaultValue={storeDetails[0].street_number}
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md block"
             type="number"
             name="streetNumber"
           />
@@ -52,7 +51,7 @@ export default async function EditStore({
           <p className="text-sm text-neutral-600">Street Name</p>
           <input
             defaultValue={storeDetails[0].street_name}
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md block"
             type="text"
             name="streetName"
           />
@@ -61,7 +60,7 @@ export default async function EditStore({
           <p className="text-sm text-neutral-600">City</p>
           <input
             defaultValue={storeDetails[0].city}
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md block"
             type="text"
             name="city"
           />
@@ -69,7 +68,7 @@ export default async function EditStore({
         <label>
           <p className="text-sm text-neutral-600">State</p>
           <select
-            className="border w-56 p-2 bg-white rounded-sm block"
+            className="border w-56 p-2 bg-white rounded-md block"
             name="state"
             defaultValue={storeDetails[0].state}
           >
@@ -84,14 +83,12 @@ export default async function EditStore({
           <p className="text-sm text-neutral-600">Zip</p>
           <input
             defaultValue={storeDetails[0].zip}
-            className="border w-56 p-1 rounded-sm block"
+            className="border w-56 p-1 rounded-md block"
             type="text"
             name="zip"
           />
         </label>
-        <button className="mt-8 border w-56 p-1 px-3 py-2 rounded-sm bg-slate">
-          Save
-        </button>
+        <Button text="Save" />
       </form>
     </div>
   );

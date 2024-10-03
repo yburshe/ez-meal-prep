@@ -20,7 +20,7 @@ export default async function NewRecipe() {
         <label>
           <p className="text-sm block">Name</p>
           <input
-            className="border w-96 p-1 rounded-sm block"
+            className="border w-96 p-1 rounded-md block"
             type="text"
             name="name"
           />
